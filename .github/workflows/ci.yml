@@ -25,6 +25,4 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: ci-secure
-          args: [
-            "--severity-threshold=medium"
-          ]
+          args: "--severity-threshold=medium"
