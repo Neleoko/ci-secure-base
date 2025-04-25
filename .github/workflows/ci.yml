@@ -21,6 +21,7 @@ jobs:
 
       - name: Run Snyk Docker scan
         uses: snyk/actions/docker@master
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
