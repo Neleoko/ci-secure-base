@@ -26,3 +26,13 @@ jobs:
         with:
           image: ci-secure
           args: "--severity-threshold=medium"
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install -y wget
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.24.0/trivy_0.24.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.24.0_Linux-64bit.deb
+
+      - name: Run Trivy scan on Docker image
+        run: |
+          trivy image --severity CRITICAL,HIGH --no-progress ci-secure
