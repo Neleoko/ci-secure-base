@@ -1,0 +1,28 @@
+name: ci-security
+on: [pull_request, push, workflow_dispatch]
+
+jobs:
+  scan:
+    name: Security Scans
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Docker image
+        run: docker build -t ci-secure .
+
+      - name: Run Snyk scan on Docker image
+        uses: snyk/actions/docker@v1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ci-secure
+          args: test --severity-threshold=medium
