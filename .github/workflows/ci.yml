@@ -2,27 +2,27 @@ name: ci-security
 on: [pull_request, push, workflow_dispatch]
 
 jobs:
-  scan:
-    name: Security Scans
+  security-scan:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Run gitleaks
+      - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t ci-secure .
+        run: docker build -t my-python-app .
 
-      - name: Run Snyk scan on Docker image
-        uses: snyk/actions/docker@v1
+      - name: Run Snyk Docker scan
+        uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: ci-secure
+          image: my-python-app
           args: test --severity-threshold=medium
