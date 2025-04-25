@@ -14,7 +14,7 @@
 import os
 from flask import Flask, request
 app = Flask(__name__)
-
+JWT_TOKEN="tokenzfgjxfsjyxtjsy"
 @app.route('/')
 def hello():
     return "Hello from Flask!"
