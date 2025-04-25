@@ -19,14 +19,29 @@ jobs:
       - name: Build Docker image
         run: docker build -t ci-secure .
 
-      - name: Run Snyk Docker scan
+      - name: Run Snyk Docker scan (JSON Report)
         uses: snyk/actions/docker@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
           image: ci-secure
-          args: "--severity-threshold=medium"
+          args: "--severity-threshold=medium --json"
+
+      - name: Save Snyk JSON output
+        run: |
+          snyk test --docker ci-secure --severity-threshold=medium --json > snyk-report.json
+
+      - name: Convert Snyk JSON report to HTML
+        run: |
+          npm install -g snyk-to-html
+          snyk-to-html -i snyk-report.json -o snyk-report.html
+
+      - name: Upload Snyk HTML report as an artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: snyk-report
+          path: snyk-report.html
 
       - name: Install Trivy
         run: |
