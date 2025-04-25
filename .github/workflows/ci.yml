@@ -17,14 +17,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Docker image
-        run: docker build -t my-python-app .
+        run: docker build -t ci-secure .
 
       - name: Run Snyk Docker scan
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: my-python-app
-          args: [
-            "--severity-threshold=medium"
-          ]
+          image: ci-secure  # ← IMPORTANT : correspond au nom donné à l’image plus haut
+          args: test --severity-threshold=medium
