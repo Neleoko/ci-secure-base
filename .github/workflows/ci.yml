@@ -24,5 +24,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: my-python-app  # ← IMPORTANT : correspond au nom donné à l’image plus haut
-          args: test --severity-threshold=medium
+          image: my-python-app
+          args: [
+            "--severity-threshold=medium"
+          ]
