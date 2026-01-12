@@ -3,3 +3,4 @@
 
 #VERSION ERREUR
 Flask==1.0  # CVE-2018-1000656, CVE-2018-1000655
+werkzeug>=3.1.5 # not directly required, pinned by Snyk to avoid a vulnerability
